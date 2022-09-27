@@ -6,9 +6,11 @@ CC := gcc
 
 SRC_PATH = src
 
-CFLAGS = -O3 -Wall -Wextra
+CFLAGS = -Wall -Wextra
 
-CDFLAGS = -O3 -Wall -Wextra -g -D DEBUG
+CDFLAGS = -Wall -Wextra -g -D DEBUG
+
+LIB := -lcrypto -lssl
 
 SRC := $(wildcard $(SRC_PATH)/*.c)
 OBJS := $(SRC:%.c=$(DESTDIR)/%.o)
@@ -16,12 +18,12 @@ OBJS := $(SRC:%.c=$(DESTDIR)/%.o)
 
 install: $(DESTDIR) $(OBJS)
 	@echo "Compiling source files..."
-	$(CC) $(CFLAGS) $(OBJS) -o $(DESTDIR)/$(DEST)
+	$(CC) $(CFLAGS) $(OBJS) -o $(DESTDIR)/$(DEST) $(LIB)
 	@echo "Done!"
 
 debug: $(DESTDIR) $(OBJS)
 	@echo "Compiling source files..."
-	$(CC) $(CDFLAGS) $(OBJS) -o $(DESTDIR)/$(DEST)
+	$(CC) $(CDFLAGS) $(OBJS) -o $(DESTDIR)/$(DEST) $(LIB)
 	@echo "Done!"
 
 $(DESTDIR):
