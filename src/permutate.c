@@ -3,6 +3,7 @@
 #include <limits.h>
 #include <string.h>
 #include <stdint.h>
+#include <time.h>
 #include "permutate.h"
 #include "md5.h"
 
@@ -36,9 +37,10 @@ static int hashcmp(const char *x, const char *y) { /* NOTE: This works like strc
 	return (*x && *y);
 }
 
-char *brute_md5(br_md5 ctx) {
-	char *guess = malloc(ctx.len*sizeof(char));
+static char *brute_char_md5(br_md5 ctx) {
+	char guess[ctx.len];
 	int correct = 0;
+	char *val;
 	for(size_t i = 0; i < ctx.len; i++) {
 		guess[i] = ctx.min;
 	}
@@ -51,9 +53,31 @@ char *brute_md5(br_md5 ctx) {
 		}
 		free(hash);
 	} while(!inc_str(guess, ctx.len, ctx.min, ctx.max));
-	if(correct) return guess;
+	if(!correct) return NULL;
 	else {
-		free(guess);
-		return NULL;
+		val = malloc(ctx.len*sizeof(char));
+		*val = '\0';
+		strcpy(val, guess);
+		return val;
 	}
+}
+
+int brute_md5(br_md5 ctx) {
+	char *ans;
+	clock_t start, end;
+	double cpu_timing;
+	printf("hash: %s\nmin: %d\nmax: %d\n", ctx.hash, ctx.min, ctx.max);
+	start = clock();
+
+	do {
+		ctx.len++;
+		printf("trying %lu chars...\n", ctx.len);
+		ans = brute_char_md5(ctx);
+	}while(ans == NULL);
+	end = clock();
+	cpu_timing = ((double)(end - start)) / CLOCKS_PER_SEC;
+	printf("solved in %f seconds\n", cpu_timing);
+	puts(ans);
+	free(ans); //we are done with it
+	return 0;
 }

@@ -32,7 +32,6 @@ int main(int argc, char **argv) {
 	max = 0;
 	br_md5 ctx;
 	long srlen;
-	char *val;
 	while((i = getopt_long(argc, argv, "hH:m:M:aA", long_options, NULL)) != -1)  {
 		switch(i) {
 			case 'h':
@@ -68,7 +67,7 @@ int main(int argc, char **argv) {
 				break;
 		}
 	}
-	ctx.len = 0;
+	ctx.len = 0; //to do
 	if(!hash) {
 		help();
 		exit(-1);
@@ -80,14 +79,8 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "min: %d\n", ctx.min);
 		fprintf(stderr, "max: %d\n", ctx.max);
 	}
-	printf("hash: %s\nmin: %d\nmax: %d\n", ctx.hash, ctx.min, ctx.max);
-	do {
-		ctx.len++;
-		printf("trying %lu chars...\n", ctx.len);
-		val = brute_md5(ctx);
-	}while(val == NULL);
-	puts("solved!");
-	puts(val);
+
+       	brute_md5(ctx);
 
 	return 0;
 }

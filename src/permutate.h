@@ -10,6 +10,6 @@ typedef struct {
 	unsigned char min;
 } br_md5;
 
-char *brute_md5(br_md5 ctx);
+int brute_md5(br_md5 ctx);
 
 #endif /* PERMUTATE_H */
