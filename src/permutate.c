@@ -66,6 +66,7 @@ int brute_md5(br_md5 ctx) {
 	char *ans;
 	clock_t start, end;
 	double cpu_timing;
+	size_t hours, minutes, seconds;
 	printf("hash: %s\nmin: %d\nmax: %d\n", ctx.hash, ctx.min, ctx.max);
 	start = clock();
 
@@ -76,7 +77,12 @@ int brute_md5(br_md5 ctx) {
 	}while(ans == NULL);
 	end = clock();
 	cpu_timing = ((double)(end - start)) / CLOCKS_PER_SEC;
-	printf("solved in %f seconds\n", cpu_timing);
+	seconds = cpu_timing;
+	minutes = seconds / 60;
+	hours = minutes / 60;
+	seconds %= 60;
+	printf("solved in %lu hours, %lu minutes, %lu seconds\nTotal time: %f\n",
+			hours, minutes, seconds, cpu_timing);
 	puts(ans);
 	free(ans); //we are done with it
 	return 0;
