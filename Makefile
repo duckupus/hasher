@@ -10,7 +10,9 @@ CFLAGS = -Wall -Wextra
 
 CDFLAGS = -Wall -Wextra -g -D DEBUG
 
-LIB := -lcrypto -lssl
+LIB := crypto ssl
+
+LIBS := $(LIB:%=-l%)
 
 SRC := $(wildcard $(SRC_PATH)/*.c)
 OBJS := $(SRC:%.c=$(DESTDIR)/%.o)
@@ -18,12 +20,12 @@ OBJS := $(SRC:%.c=$(DESTDIR)/%.o)
 
 install: $(DESTDIR) $(OBJS)
 	@echo "Compiling source files..."
-	$(CC) $(CFLAGS) $(OBJS) -o $(DESTDIR)/$(DEST) $(LIB)
+	$(CC) $(CFLAGS) $(OBJS) -o $(DESTDIR)/$(DEST) $(LIBS)
 	@echo "Done!"
 
 debug: $(DESTDIR) $(OBJS)
 	@echo "Compiling source files..."
-	$(CC) $(CDFLAGS) $(OBJS) -o $(DESTDIR)/$(DEST) $(LIB)
+	$(CC) $(CDFLAGS) $(OBJS) -o $(DESTDIR)/$(DEST) $(LIBS)
 	@echo "Done!"
 
 $(DESTDIR):
