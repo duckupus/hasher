@@ -27,7 +27,11 @@ static int inc_str(char *s, size_t len, char min, char max) {
 
 }
 
-static int hashcmp(const char *x, const char *y) { /* NOTE: This works like strcmp, just that it returns true if one string terminates early*/
+static int hashcmp(const char *x, const char *y) { 
+	/* NOTE: This works like strcmp, just that it returns true if one string terminates early.
+	 * This allows you to insert part of a hash.
+	 * And still get a value for the corresponding hash
+	 */
 	while((*x && *y)) {
 		if(*x != *y)
 			break;
@@ -80,6 +84,7 @@ int brute_md5(br_md5 ctx) {
 	seconds = cpu_timing;
 	minutes = seconds / 60;
 	hours = minutes / 60;
+	minutes %= 60;
 	seconds %= 60;
 	printf("solved in %lu hours, %lu minutes, %lu seconds\nTotal time: %f\n",
 			hours, minutes, seconds, cpu_timing);
