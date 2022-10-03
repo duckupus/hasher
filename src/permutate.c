@@ -22,7 +22,7 @@ static int checkHash(char *x) {
 		i++;
 	}
 	if(i == MD5_HASH_LENGTH) {
-		x[1] = '\0'; //null out last part
+		*x = '\0'; //null out last part
 	}
 	return 0;
 }
