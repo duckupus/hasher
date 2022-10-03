@@ -24,16 +24,6 @@ static struct option long_options[] = {
 	{"anum", no_argument, NULL, 'A'}
 };
 
-static int checkHash(char *x) {
-	while(*x) {
-		if(*x >= 'A' && *x <= 'F')
-			*x |= 0x20; //convert to small letters
-		if(*x < '0' || (*x > '9' && *x < 'a') || *x > 'f')
-			return 1;
-		x++;
-	}
-	return 0;
-}
 
 int main(int argc, char **argv) {
 	int i;
@@ -54,12 +44,7 @@ int main(int argc, char **argv) {
 				ctx.hash = malloc(srlen*sizeof(char));
 				ctx.hash[srlen] = 0x00;
 				strncpy(ctx.hash, optarg, srlen);
-				if(checkHash(ctx.hash)) {
-					fprintf(stderr, "invalid hash\n");
-					exit(-1); //outta there!
-				}
-				else
-					hash = 1;
+				hash = 1;
 				break;
 			case 'm':
 				ctx.min = atoi(optarg);

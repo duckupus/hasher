@@ -7,6 +7,26 @@
 #include "permutate.h"
 #include "md5.h"
 
+
+static int checkHash(char *x) {
+	size_t i = 0;
+	while(*x && i < MD5_HASH_LENGTH) { //checks first 32 characters
+		if(*x >= 'A' && *x <= 'F')
+			*x |= 0x20; //convert to small letters
+		if(*x < '0' || (*x > '9' && *x < 'a') || *x > 'f') {
+			fprintf(stderr, "invalid hash\n");
+			exit(-1); //outta there!
+			return 1;
+		}
+		x++;
+		i++;
+	}
+	if(i == MD5_HASH_LENGTH) {
+		x[1] = '\0'; //null out last part
+	}
+	return 0;
+}
+
 static int inc_str(char *s, size_t len, char min, char max) {
 	size_t j = len;
 	size_t i;
@@ -28,7 +48,8 @@ static int inc_str(char *s, size_t len, char min, char max) {
 }
 
 static int hashcmp(const char *x, const char *y) { 
-	/* NOTE: This works like strcmp, just that it returns true if one string terminates early.
+	/* 
+	 * NOTE: This works like strcmp, just that it returns true if one string terminates early.
 	 * This allows you to insert part of a hash.
 	 * And still get a value for the corresponding hash
 	 */
@@ -71,6 +92,7 @@ int brute_md5(br_md5 ctx) {
 	clock_t start, end;
 	double cpu_timing;
 	size_t hours, minutes, seconds;
+	checkHash(ctx.hash);
 	printf("hash: %s\nmin: %d\nmax: %d\n", ctx.hash, ctx.min, ctx.max);
 	start = clock();
 
