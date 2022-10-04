@@ -1,6 +1,6 @@
-DEST := hasher
-
 DESTDIR = build
+
+DEST := $(DESTDIR)/hasher
 
 CC := gcc
 
@@ -8,7 +8,7 @@ SRC_PATH = src
 
 CFLAGS = -Wall -Wextra
 
-CDFLAGS = -Wall -Wextra -g -D DEBUG
+CDFLAGS = $(CFLAGS) -g -D DEBUG
 
 LIB := crypto ssl
 
@@ -20,12 +20,12 @@ OBJS := $(SRC:%.c=$(DESTDIR)/%.o)
 
 install: $(DESTDIR) $(OBJS)
 	@echo "Compiling source files..."
-	$(CC) $(CFLAGS) $(OBJS) -o $(DESTDIR)/$(DEST) $(LIBS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(DEST) $(LIBS)
 	@echo "Done!"
 
 debug: $(DESTDIR) $(OBJS)
 	@echo "Compiling source files..."
-	$(CC) $(CDFLAGS) $(OBJS) -o $(DESTDIR)/$(DEST) $(LIBS)
+	$(CC) $(CDFLAGS) $(OBJS) -o $(DEST) $(LIBS)
 	@echo "Done!"
 
 $(DESTDIR):
