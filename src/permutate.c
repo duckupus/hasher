@@ -10,12 +10,12 @@
 
 static int checkHash(char *x) {
 	size_t i = 0;
-	while(*x && i < MD5_HASH_LENGTH) { //checks first 32 characters
+	while(*x && i < MD5_HASH_LENGTH) {
 		if(*x >= 'A' && *x <= 'F')
 			*x |= 0x20; //convert to small letters
 		if(*x < '0' || (*x > '9' && *x < 'a') || *x > 'f') {
 			fprintf(stderr, "invalid hash\n");
-			exit(-1); //outta there!
+			exit(-1);
 			return 1;
 		}
 		x++;
@@ -29,18 +29,17 @@ static int checkHash(char *x) {
 
 static int inc_str(char *s, size_t len, char min, char max) {
 	size_t j = len;
-	size_t i;
-	for(i = 0; i < len && s[i] == max; i++) {}
-	if(i == len)
-		return 1;
+	static int check = 0;
 	if(s[len-1] == max) {
 		for(j = len-1; j > 0 && s[j] == max; j--)
 			s[j] = min;
-		s[j]++;
-		/*
-		if(j == 0 && s[j-1] == max) {
+		if(check && j == 0 && *s == max) {
+			check = 0;
 			return 1;
-		} */
+		}
+		if(j == 0)
+			check = 1;
+		s[j]++;
 	} else
 		s[len-1]++;
 	return 0;
@@ -111,6 +110,6 @@ int brute_md5(br_md5 ctx) {
 	printf("solved in %lu hours, %lu minutes, %lu seconds\nTotal time: %f\n",
 			hours, minutes, seconds, cpu_timing);
 	puts(ans);
-	free(ans); //we are done with it
+	free(ans);
 	return 0;
 }
