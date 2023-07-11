@@ -11,6 +11,7 @@ static void help() {
 	puts("-H\t--hash [md5 hash] e.g. -H dd76adf401d8ed0cc5485230dc83758b");
 	puts("-m\t--min [min value(inclusive)] e.g. -m 5");
 	puts("-M\t--max [max value(inclusive)] e.g. -M 10");
+	puts("-l\t--len [length of inputs to test(without null)] e.g. -l 10");
 	puts("-a\t--alph sets min max value to A-z");
 	puts("-A\t--anum sets min max value to all printable ascii values"); //according to ascii chart
 }
@@ -21,7 +22,8 @@ static struct option long_options[] = {
 	{"min", required_argument, NULL, 'm'},
 	{"max", required_argument, NULL, 'M'},
 	{"alph", no_argument, NULL, 'a'},
-	{"anum", no_argument, NULL, 'A'}
+	{"anum", no_argument, NULL, 'A'},
+	{"len", required_argument, NULL, 'l'}
 };
 
 
@@ -32,8 +34,9 @@ int main(int argc, char **argv) {
 	min = 0;
 	max = 0;
 	br_md5 ctx;
+	ctx.len = 0;
 	long srlen;
-	while((i = getopt_long(argc, argv, "hH:m:M:aA", long_options, NULL)) != -1)  {
+	while((i = getopt_long(argc, argv, "hH:m:M:aAl:", long_options, NULL)) != -1)  {
 		switch(i) {
 			case 'h':
 				help();
@@ -66,9 +69,12 @@ int main(int argc, char **argv) {
 				ctx.max = '~';
 				max = 1;
 				break;
+			case 'l':
+				if(atoi(optarg) > 0) { //ctx.len gets incremented later
+					ctx.len = atoi(optarg) - 1;
+				}
 		}
 	}
-	ctx.len = 0; //to do
 	if(!hash) {
 		help();
 		exit(-1);
